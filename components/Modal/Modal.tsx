@@ -13,9 +13,21 @@ export default function Modal({ children, onClose }: ModalProps) {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleEscape);
+   
+    document.body.style.overflow = "hidden";
     return () => window.removeEventListener("keydown", handleEscape);
+    
   }, [onClose]);
+  
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+  
   return createPortal(
     <div className={css.backdrop} onClick={onClose} role="dialog" aria-modal="true">
       <div className={css.modal} onClick={(e) => e.stopPropagation()}>

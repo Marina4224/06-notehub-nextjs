@@ -28,7 +28,7 @@ export async function fetchNotes(
   return response.data;
   
   }
-export type CreateNoteInput = Omit<Note, "id" | "createdAt">;
+export type CreateNoteInput = Omit<Note, "id" | "createdAt" | "updatedAt">;
 
 export async function createNote(
   note: CreateNoteInput
@@ -37,14 +37,12 @@ export async function createNote(
   return response.data;
 }
 
-export async function deleteNote(
-  id: string
-): Promise<void> {
-  await api.delete(`/notes/${id}`);
+export async function deleteNote(id: string): Promise<Note> {
+  const response = await api.delete<Note>(`/notes/${id}`);
+  return response.data;
 }
+
 export async function fetchNoteById(id: Note['id']): Promise<Note> {
-    const response = await axios.get<Note>(`${BASE_URL}/notes/${id}`, {
-        headers: { Authorization: `Bearer ${token}`},
-    });
-return response.data;
-}
+    const response = await api.get<Note>(`/notes/${id}`);
+  return response.data;
+    };
