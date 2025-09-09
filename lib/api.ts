@@ -6,14 +6,12 @@ const token = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 
 const api = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
+  headers: {Authorization: `Bearer ${token}`},
 });
 
 export interface FetchNotesResponse {
   notes: Note[];
-    totalPages: number;
+  totalPages: number;
 }
 
 export async function fetchNotes(
@@ -45,4 +43,4 @@ export async function deleteNote(id: string): Promise<Note> {
 export async function fetchNoteById(id: Note['id']): Promise<Note> {
     const response = await api.get<Note>(`/notes/${id}`);
   return response.data;
-    };
+    }

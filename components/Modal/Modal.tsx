@@ -12,25 +12,30 @@ export default function Modal({ children, onClose }: ModalProps) {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
+
     window.addEventListener("keydown", handleEscape);
-   
-    document.body.style.overflow = "hidden";
-    return () => window.removeEventListener("keydown", handleEscape);
-    
-  }, [onClose]);
-  
-  useEffect(() => {
+
+    // блокуємо скрол
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // при анмаунті прибираємо все
     return () => {
+      window.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = originalOverflow;
     };
-  }, []);
-  
+  }, [onClose]);
+
   return createPortal(
-    <div className={css.backdrop} onClick={onClose} role="dialog" aria-modal="true">
-      <div className={css.modal} onClick={(e) => e.stopPropagation()}>
+    <div
+      className={css.backdrop}
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose(); // закриваємо тільки якщо клік саме по бекдропу
+      }}
+    >
+      <div className={css.modal}>
         {children}
       </div>
     </div>,
